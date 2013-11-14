@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Underscore Cheat Sheet</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <h1>Underscore 1.4.4 API Cheat Sheet</h1>
+    <ul class="columns">
+        <li>
+            <h2>Collection</h2>
+
+            <h3>Many-to-many</h3>
+
+            <ul class="list">
+                <li id="map">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#map">map</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                        <span class="alias">collect</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Produces a new array of values by mapping each value in <b>list</b> through a transformation function (<b>iterator</b>). If the native <b>map</b> method exists, it will be used instead. If <b>list</b> is a JavaScript object, <b>iterator</b>'s arguments will be <mark>(value, key, list)</mark>.</div>
+                        <div class="code">_.map([1, 2, 3], function(num){ return num * 3; }); <br> =&gt; [3, 6, 9] <br> _.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; }); <br> =&gt; [3, 6, 9]</div>
+                    </div>
+                </li>
+
+                <li id="invoke">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#invoke">invoke</a>
+                        <span class="arg">(list, methodName, [*arguments])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Calls the method named by <b>methodName</b> on each value in the <b>list</b>. Any extra arguments passed to <b>invoke</b> will be forwarded on to the method invocation.</div>
+                        <div class="code">_.invoke([[5, 1, 7], [3, 2, 1]], 'sort'); <br> =&gt; [[1, 5, 7], [1, 2, 3]]</div>
+                    </div>
+                </li>
+
+                <li id="pluck">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#pluck">pluck</a>
+                        <span class="arg">(list, propertyName)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">A convenient version of what is perhaps the most common use-case for <b>map</b>: extracting a list of property values.</div>
+                        <div class="code">var stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}]; <br> _.pluck(stooges, 'name'); <br> =&gt; ["moe", "larry", "curly"]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Many-to-one</h3>
+
+            <ul class="list">
+                <li id="reduce">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#reduce">reduce</a>
+                        <span class="arg">(list, iterator, memo, [context])</span>
+                        <span class="alias">inject, foldl</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Also known as <b>inject</b> and <b>foldl</b>, <b>reduce</b> boils down a <b>list</b> of values into a single value. <b>Memo</b> is the initial state of the reduction, and each successive step of it should be returned by <b>iterator</b>. The iterator is passed four arguments: the <mark>memo</mark>, then the <mark>value</mark> and <mark>index</mark> (or key) of the iteration, and finally a reference to the entire <mark>list</mark>.</div>
+                        <div class="code">var sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0); <br> =&gt; 6</div>
+                    </div>
+                </li>
+
+                <li id="reduceRight">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#reduceRight">reduceRight</a>
+                        <span class="arg">(list, iterator, memo, [context])</span>
+                        <span class="alias">foldr</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">The right-associative version of <b>reduce</b>. Delegates to the JavaScript 1.8 version of <b>reduceRight</b>, if it exists. <b>Foldr</b> is not as useful in JavaScript as it would be in a language with lazy evaluation.</div>
+                        <div class="code">var list = [[0, 1], [2, 3], [4, 5]]; <br> var flat = _.reduceRight(list, function(a, b) { return a.concat(b); }, []); <br> =&gt; [4, 5, 2, 3, 0, 1]</div>
+                    </div>
+                </li>
+
+                <li id="every">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#every">every</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                        <span class="alias">all</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if all of the values in the <b>list</b> pass the <b>iterator</b> truth test. Delegates to the native method <b>every</b>, if present.</div>
+                        <div class="code">_.every([true, 1, null, 'yes'], _.identity); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="some">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#some">some</a>
+                        <span class="arg">(list, [iterator], [context])</span>
+                        <span class="alias">any</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if any of the values in the <b>list</b> pass the <b>iterator</b> truth test. Short-circuits and stops traversing the list if a true element is found. Delegates to the native method <b>some</b>, if present.</div>
+                        <div class="code">_.some([null, 0, 'yes', false]); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="max">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#max">max</a>
+                        <span class="arg">(list, [iterator], [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the maximum value in <b>list</b>. If <b>iterator</b> is passed, it will be used on each value to generate the criterion by which the value is ranked.</div>
+                        <div class="code">var stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}]; <br> _.max(stooges, function(stooge){ return stooge.age; }); <br> =&gt; {name : 'curly', age : 60};</div>
+                    </div>
+                </li>
+
+                <li id="min">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#min">min</a>
+                        <span class="arg">(list, [iterator], [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the minimum value in <b>list</b>. If <b>iterator</b> is passed, it will be used on each value to generate the criterion by which the value is ranked.</div>
+                        <div class="code">var numbers = [10, 5, 100, 2, 1000]; <br> _.min(numbers); <br> =&gt; 2</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Filter</h3>
+
+            <ul class="list">
+                <li id="find">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#find">find</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                        <span class="alias">detect</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Looks through each value in the <b>list</b>, returning the first one that passes a truth test (<b>iterator</b>). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.</div>
+                        <div class="code">var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; }); <br> =&gt; 2</div>
+                    </div>
+                </li>
+
+                <li id="filter">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#filter">filter</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                        <span class="alias">select</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Looks through each value in the <b>list</b>, returning an array of all the values that pass a truth test (<b>iterator</b>). Delegates to the native <b>filter</b> method, if it exists.</div>
+                        <div class="code">var evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; }); <br> =&gt; [2, 4, 6]</div>
+                    </div>
+                </li>
+
+                <li id="reject">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#reject">reject</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the values in <b>list</b> without the elements that the truth test (<b>iterator</b>) passes. The opposite of <b>filter</b>.</div>
+                        <div class="code">var odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; }); <br> =&gt; [1, 3, 5]</div>
+                    </div>
+                </li>
+
+                <li id="findWhere">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#findWhere">findWhere</a>
+                        <span class="arg">(list, properties)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Looks through the <b>list</b> and returns the <i>first</i> value that matches all of the key-value pairs listed in <b>properties</b>.</div>
+                        <div class="code">_.findWhere(publicServicePulitzers, {newsroom: "The New York Times"}); <br> =&gt; {year: 1918, newsroom: "The New York Times", <br> reason: "For its public service in publishing in full so many official reports, <br> documents and speeches by European statesmen relating to the progress and <br> conduct of the war."}</div>
+                    </div>
+                </li>
+
+                <li id="where">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#where">where</a>
+                        <span class="arg">(list, properties)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Looks through each value in the <b>list</b>, returning an array of all the values that contain all of the key-value pairs listed in <b>properties</b>.</div>
+                        <div class="code">_.where(listOfPlays, {author: "Shakespeare", year: 1611}); <br> =&gt; [{title: "Cymbeline", author: "Shakespeare", year: 1611}, <br> {title: "The Tempest", author: "Shakespeare", year: 1611}]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Regroup</h3>
+
+            <ul class="list">
+                <li id="sortBy">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#sortBy">sortBy</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a sorted copy of <b>list</b>, ranked in ascending order by the results of running each value through <b>iterator</b>. Iterator may also be the string name of the property to sort by (eg. <mark>length</mark>).</div>
+                        <div class="code">_.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); }); <br> =&gt; [5, 4, 6, 3, 1, 2]</div>
+                    </div>
+                </li>
+
+                <li id="groupBy">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#groupBy">groupBy</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Splits a collection into sets, grouped by the result of running each value through <b>iterator</b>. If <b>iterator</b> is a string instead of a function, groups by the property named by <b>iterator</b> on each of the values.</div>
+                        <div class="code">_.groupBy([1.3, 2.1, 2.4], function(num){ return Math.floor(num); }); <br> =&gt; {1: [1.3], 2: [2.1, 2.4]} <br><br> _.groupBy(['one', 'two', 'three'], 'length'); <br> =&gt; {3: ["one", "two"], 5: ["three"]}</div>
+                    </div>
+                </li>
+
+                <li id="countBy">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#countBy">countBy</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Sorts a list into groups and returns a count for the number of objects in each group. Similar to <mark>groupBy</mark>, but instead of returning a list of values, returns a count for the number of values in that group.</div>
+                        <div class="code">_.countBy([1, 2, 3, 4, 5], function(num) { <br> return num % 2 == 0 ? 'even' : 'odd'; <br> }); <br> =&gt; {odd: 3, even: 2}</div>
+                    </div>
+                </li>
+
+                <li id="shuffle">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#shuffle">shuffle</a>
+                        <span class="arg">(list)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a shuffled copy of the <b>list</b>, using a version of the <a href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle</a>.</div>
+                        <div class="code">_.shuffle([1, 2, 3, 4, 5, 6]); <br> =&gt; [4, 1, 6, 3, 5, 2]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Other</h3>
+
+            <ul class="list">
+                <li id="each">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#each">each</a>
+                        <span class="arg">(list, iterator, [context])</span>
+                        <span class="alias">forEach</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Iterates over a <b>list</b> of elements, yielding each in turn to an <b>iterator</b> function. The <b>iterator</b> is bound to the <b>context</b> object, if one is passed. Each invocation of <b>iterator</b> is called with three arguments: <mark>(element, index, list)</mark>. If <b>list</b> is a JavaScript object, <b>iterator</b>'s arguments will be <mark>(value, key, list)</mark>. Delegates to the native <b>forEach</b> function if it exists.</div>
+                        <div class="code">_.each([1, 2, 3], alert); <br> =&gt; alerts each number in turn... <br> _.each({one : 1, two : 2, three : 3}, alert); <br> =&gt; alerts each number value in turn...</div>
+                    </div>
+                </li>
+
+                <li id="toArray">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#toArray">toArray</a>
+                        <span class="arg">(list)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Converts the <b>list</b> (anything that can be iterated over), into a real Array. Useful for transmuting the <b>arguments</b> object.</div>
+                        <div class="code">(function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4); <br> =&gt; [2, 3, 4]</div>
+                    </div>
+                </li>
+
+                <li id="size">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#size">size</a>
+                        <span class="arg">(list)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Return the number of values in the <b>list</b>.</div>
+                        <div class="code">_.size({one : 1, two : 2, three : 3}); <br> =&gt; 3</div>
+                    </div>
+                </li>
+
+                <li id="contains">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#contains">contains</a>
+                        <span class="arg">(list, value)</span>
+                        <span class="alias">include</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if the <b>value</b> is present in the <b>list</b>. Uses <b>indexOf</b> internally, if <b>list</b> is an Array.</div>
+                        <div class="code">_.contains([1, 2, 3], 3); <br> =&gt; true</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <h2>Array</h2>
+
+            <h3>Get a range</h3>
+
+            <ul class="list">
+                <li id="first">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#first">first</a>
+                        <span class="arg">(array, [n])</span>
+                        <span class="alias">head, take</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the first element of an <b>array</b>. Passing <b>n</b> will return the first <b>n</b> elements of the array.</div>
+                        <div class="code">_.first([5, 4, 3, 2, 1]); <br> =&gt; 5</div>
+                    </div>
+                </li>
+
+                <li id="initial">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#initial">initial</a>
+                        <span class="arg">(array, [n])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns everything but the last entry of the array. Especially useful on the arguments object. Pass <b>n</b> to exclude the last <b>n</b> elements from the result.</div>
+                        <div class="code">_.initial([5, 4, 3, 2, 1]); <br> =&gt; [5, 4, 3, 2]</div>
+                    </div>
+                </li>
+
+                <li id="last">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#last">last</a>
+                        <span class="arg">(array, [n])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the last element of an <b>array</b>. Passing <b>n</b> will return the last <b>n</b> elements of the array.</div>
+                        <div class="code">_.last([5, 4, 3, 2, 1]); <br> =&gt; 1</div>
+                    </div>
+                </li>
+
+                <li id="rest">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#rest">rest</a>
+                        <span class="arg">(array, [index])</span>
+                        <span class="alias">tail, drop</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the <b>rest</b> of the elements in an array. Pass an <b>index</b> to return the values of the array from that index onward.</div>
+                        <div class="code">_.rest([5, 4, 3, 2, 1]); <br> =&gt; [4, 3, 2, 1]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Filter</h3>
+
+            <ul class="list">
+                <li id="compact">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#compact">compact</a>
+                        <span class="arg">(array)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a copy of the <b>array</b> with all falsy values removed. In JavaScript, <i>false</i>, <i>null</i>, <i>0</i>, <i>""</i>, <i>undefined</i> and <i>NaN</i> are all falsy.</div>
+                        <div class="code">_.compact([0, 1, false, 2, '', 3]); <br> =&gt; [1, 2, 3]</div>
+                    </div>
+                </li>
+
+                <li id="flatten">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#flatten">flatten</a>
+                        <span class="arg">(array, [shallow])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Flattens a nested <b>array</b> (the nesting can be to any depth). If you pass <b>shallow</b>, the array will only be flattened a single level.</div>
+                        <div class="code">_.flatten([1, [2], [3, [[4]]]]); <br> =&gt; [1, 2, 3, 4]; <br><br> _.flatten([1, [2], [3, [[4]]]], true); <br> =&gt; [1, 2, 3, [[4]]];</div>
+                    </div>
+                </li>
+
+                <li id="without">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#without">without</a>
+                        <span class="arg">(array, [*values])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a copy of the <b>array</b> with all instances of the <b>values</b> removed.</div>
+                        <div class="code">_.without([1, 2, 1, 0, 3, 1, 4], 0, 1); <br> =&gt; [2, 3, 4]</div>
+                    </div>
+                </li>
+
+                <li id="uniq">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#uniq">uniq</a>
+                        <span class="arg">(array, [isSorted], [iterator])</span>
+                        <span class="alias">unique</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Produces a duplicate-free version of the <b>array</b>, using <i>===</i> to test object equality. If you know in advance that the <b>array</b> is sorted, passing <i>true</i> for <b>isSorted</b> will run a much faster algorithm. If you want to compute unique items based on a transformation, pass an <b>iterator</b> function.</div>
+                        <div class="code">_.uniq([1, 2, 1, 3, 1, 4]); <br> =&gt; [1, 2, 3, 4]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Binary operations</h3>
+
+            <ul class="list">
+                <li id="union">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#union">union</a>
+                        <span class="arg">(*arrays)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Computes the union of the passed-in <b>arrays</b>: the list of unique items, in order, that are present in one or more of the <b>arrays</b>.</div>
+                        <div class="code">_.union([1, 2, 3], [101, 2, 1, 10], [2, 1]); <br> =&gt; [1, 2, 3, 101, 10]</div>
+                    </div>
+                </li>
+
+                <li id="intersection">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#intersection">intersection</a>
+                        <span class="arg">(*arrays)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Computes the list of values that are the intersection of all the <b>arrays</b>. Each value in the result is present in each of the <b>arrays</b>.</div>
+                        <div class="code">_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]); <br> =&gt; [1, 2]</div>
+                    </div>
+                </li>
+
+                <li id="difference">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#difference">difference</a>
+                        <span class="arg">(array, *others)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Similar to <b>without</b>, but returns the values from <b>array</b> that are not present in the <b>other</b> arrays.</div>
+                        <div class="code">_.difference([1, 2, 3, 4, 5], [5, 2, 10]); <br> =&gt; [1, 3, 4]</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Regroup</h3>
+
+            <ul class="list">
+                <li id="zip">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#zip">zip</a>
+                        <span class="arg">(*arrays)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Merges together the values of each of the <b>arrays</b> with the values at the corresponding position. Useful when you have separate data sources that are coordinated through matching array indexes. If you're working with a matrix of nested arrays, <b>zip.apply</b> can transpose the matrix in a similar fashion.</div>
+                        <div class="code">_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]); <br> =&gt; [["moe", 30, true], ["larry", 40, false], ["curly", 50, false]]</div>
+                    </div>
+                </li>
+
+                <li id="object">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#object">object</a>
+                        <span class="arg">(list, [values])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Converts arrays into objects. Pass either a single list of <mark>[key, value]</mark> pairs, or a list of keys, and a list of values.</div>
+                        <div class="code">_.object(['moe', 'larry', 'curly'], [30, 40, 50]); <br> =&gt; {moe: 30, larry: 40, curly: 50} <br><br> _.object([['moe', 30], ['larry', 40], ['curly', 50]]); <br> =&gt; {moe: 30, larry: 40, curly: 50}</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Index</h3>
+
+            <ul class="list">
+                <li id="indexOf">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#indexOf">indexOf</a>
+                        <span class="arg">(array, value, [isSorted])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the index at which <b>value</b> can be found in the <b>array</b>, or <i>-1</i> if value is not present in the <b>array</b>. Uses the native <b>indexOf</b> function unless it's missing. If you're working with a large array, and you know that the array is already sorted, pass <mark>true</mark> for <b>isSorted</b> to use a faster binary search ... or, pass a number as the third argument in order to look for the first matching value in the array after the given index.</div>
+                        <div class="code">_.indexOf([1, 2, 3], 2); <br> =&gt; 1</div>
+                    </div>
+                </li>
+
+                <li id="lastIndexOf">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#lastIndexOf">lastIndexOf</a>
+                        <span class="arg">(array, value, [fromIndex])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the index of the last occurrence of <b>value</b> in the <b>array</b>, or <i>-1</i> if value is not present. Uses the native <b>lastIndexOf</b> function if possible. Pass <b>fromIndex</b> to start your search at a given index.</div>
+                        <div class="code">_.lastIndexOf([1, 2, 3, 1, 2, 3], 2); <br> =&gt; 4</div>
+                    </div>
+                </li>
+
+                <li id="sortedIndex">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#sortedIndex">sortedIndex</a>
+                        <span class="arg">(list, value, [iterator], [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Uses a binary search to determine the index at which the <b>value</b> <i>should</i> be inserted into the <b>list</b> in order to maintain the <b>list</b>'s sorted order. If an <b>iterator</b> is passed, it will be used to compute the sort ranking of each value, including the <b>value</b> you pass.</div>
+                        <div class="code">_.sortedIndex([10, 20, 30, 40, 50], 35); <br> =&gt; 3</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Generation</h3>
+
+            <ul class="list">
+                <li id="range">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#range">range</a>
+                        <span class="arg">([start], stop, [step])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">A function to create flexibly-numbered lists of integers, handy for <mark>each</mark> and <mark>map</mark> loops. <b>start</b>, if omitted, defaults to <i>0</i>; <b>step</b> defaults to <i>1</i>. Returns a list of integers from <b>start</b> to <b>stop</b>, incremented (or decremented) by <b>step</b>, exclusive.</div>
+                        <div class="code">_.range(10); <br> =&gt; [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] <br> _.range(1, 11); <br> =&gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] <br> _.range(0, 30, 5); <br> =&gt; [0, 5, 10, 15, 20, 25] <br> _.range(0, -10, -1); <br> =&gt; [0, -1, -2, -3, -4, -5, -6, -7, -8, -9] <br> _.range(0); <br> =&gt; []</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <h2>Function (uh, ahem)</h2>
+
+            <h3>Bind</h3>
+
+            <ul class="list">
+                <li id="bind">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#bind">bind</a>
+                        <span class="arg">(function, object, [*arguments])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Bind a <b>function</b> to an <b>object</b>, meaning that whenever the function is called, the value of <i>this</i> will be the <b>object</b>. Optionally, pass <b>arguments</b> to the <b>function</b> to pre-fill them, also known as <b>partial application</b>.</div>
+                        <div class="code">var func = function(greeting){ return greeting + ': ' + this.name }; <br> func = _.bind(func, {name : 'moe'}, 'hi'); <br> func(); <br> =&gt; 'hi: moe'</div>
+                    </div>
+                </li>
+
+                <li id="bindAll">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#bindAll">bindAll</a>
+                        <span class="arg">(object, [*methodNames])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Binds a number of methods on the <b>object</b>, specified by <b>methodNames</b>, to be run in the context of that object whenever they are invoked. Very handy for binding functions that are going to be used as event handlers, which would otherwise be invoked with a fairly useless <i>this</i>. If no <b>methodNames</b> are provided, all of the object's function properties will be bound to it.</div>
+                        <div class="code">var buttonView = { <br> label   : 'underscore', <br> onClick : function(){ alert('clicked: ' + this.label); }, <br> onHover : function(){ console.log('hovering: ' + this.label); } <br> }; <br> _.bindAll(buttonView); <br> jQuery('#underscore_button').bind('click', buttonView.onClick); <br> =&gt; When the button is clicked, this.label will have the correct value...</div>
+                    </div>
+                </li>
+
+                <li id="partial">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#partial">partial</a>
+                        <span class="arg">(function, [*arguments])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Partially apply a function by filling in any number of its arguments, <i>without</i> changing its dynamic <mark>this</mark> value. A close cousin of <a href="#bind">bind</a>.</div>
+                        <div class="code">var add = function(a, b) { return a + b; }; <br> add5 = _.partial(add, 5); <br> add5(10); <br> =&gt; 15</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Deferred</h3>
+
+            <ul class="list">
+                <li id="delay">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#delay">delay</a>
+                        <span class="arg">(function, wait, [*arguments])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Much like <b>setTimeout</b>, invokes <b>function</b> after <b>wait</b> milliseconds. If you pass the optional <b>arguments</b>, they will be forwarded on to the <b>function</b> when it is invoked.</div>
+                        <div class="code">var log = _.bind(console.log, console); <br> _.delay(log, 1000, 'logged later'); <br> =&gt; 'logged later' // Appears after one second.</div>
+                    </div>
+                </li>
+
+                <li id="defer">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#defer">defer</a>
+                        <span class="arg">(function, [*arguments])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Defers invoking the <b>function</b> until the current call stack has cleared, similar to using <b>setTimeout</b> with a delay of 0. Useful for performing expensive computations or HTML rendering in chunks without blocking the UI thread from updating. If you pass the optional <b>arguments</b>, they will be forwarded on to the <b>function</b> when it is invoked.</div>
+                        <div class="code">_.defer(function(){ alert('deferred'); }); <br> // Returns from the function before the alert runs.</div>
+                    </div>
+                </li>
+
+                <li id="throttle">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#throttle">throttle</a>
+                        <span class="arg">(function, wait)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Creates and returns a new, throttled version of the passed function, that, when invoked repeatedly, will only actually call the original function at most once per every <b>wait</b> milliseconds. Useful for rate-limiting events that occur faster than you can keep up with.</div>
+                        <div class="code">var throttled = _.throttle(updatePosition, 100); <br> $(window).scroll(throttled);</div>
+                    </div>
+                </li>
+
+                <li id="debounce">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#debounce">debounce</a>
+                        <span class="arg">(function, wait, [immediate])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Creates and returns a new debounced version of the passed function that will postpone its execution until after <b>wait</b> milliseconds have elapsed since the last time it was invoked. Useful for implementing behavior that should only happen <i>after</i> the input has stopped arriving. For example: rendering a preview of a Markdown comment, recalculating a layout after the window has stopped being resized, and so on.</div>
+                        <div class="code">var lazyLayout = _.debounce(calculateLayout, 300); <br> $(window).resize(lazyLayout);</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>N times</h3>
+
+            <ul class="list">
+                <li id="once">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#once">once</a>
+                        <span class="arg">(function)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Creates a version of the function that can only be called one time. Repeated calls to the modified function will have no effect, returning the value from the original call. Useful for initialization functions, instead of having to set a boolean flag and then check it later.</div>
+                        <div class="code">var initialize = _.once(createApplication); <br> initialize(); <br> initialize(); <br> // Application is only created once.</div>
+                    </div>
+                </li>
+
+                <li id="after">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#after">after</a>
+                        <span class="arg">(count, function)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Creates a version of the function that will only be run after first being called <b>count</b> times. Useful for grouping asynchronous responses, where you want to be sure that all the async calls have finished, before proceeding.</div>
+                        <div class="code">var renderNotes = _.after(notes.length, render); <br> _.each(notes, function(note) { <br> note.asyncSave({success: renderNotes}); <br> }); <br> // renderNotes is run once, after all notes have saved.</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Other</h3>
+
+            <ul class="list">
+                <li id="wrap">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#wrap">wrap</a>
+                        <span class="arg">(function, wrapper)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Wraps the first <b>function</b> inside of the <b>wrapper</b> function, passing it as the first argument. This allows the <b>wrapper</b> to execute code before and after the <b>function</b> runs, adjust the arguments, and execute it conditionally.</div>
+                        <div class="code">var hello = function(name) { return "hello: " + name; }; <br> hello = _.wrap(hello, function(func) { <br> return "before, " + func("moe") + ", after"; <br> }); <br> hello(); <br> =&gt; 'before, hello: moe, after'</div>
+                    </div>
+                </li>
+
+                <li id="compose">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#compose">compose</a>
+                        <span class="arg">(*functions)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the composition of a list of <b>functions</b>, where each function consumes the return value of the function that follows. In math terms, composing the functions <i>f()</i>, <i>g()</i>, and <i>h()</i> produces <i>f(g(h()))</i>.</div>
+                        <div class="code">var greet    = function(name){ return "hi: " + name; }; <br> var exclaim  = function(statement){ return statement + "!"; }; <br> var welcome = _.compose(exclaim, greet); <br> welcome('moe'); <br> =&gt; 'hi: moe!'</div>
+                    </div>
+                </li>
+
+                <li id="memoize">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#memoize">memoize</a>
+                        <span class="arg">(function, [hashFunction])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Memoizes a given <b>function</b> by caching the computed result. Useful for speeding up slow-running computations. If passed an optional <b>hashFunction</b>, it will be used to compute the hash key for storing the result, based on the arguments to the original function. The default <b>hashFunction</b> just uses the first argument to the memoized function as the key.</div>
+                        <div class="code">var fibonacci = _.memoize(function(n) { <br> return n &lt; 2 ? n : fibonacci(n - 1) + fibonacci(n - 2); <br> });</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <h2>Object</h2>
+
+            <h3>Reflection</h3>
+
+            <ul class="list">
+                <li id="keys">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#keys">keys</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Retrieve all the names of the <b>object</b>'s properties.</div>
+                        <div class="code">_.keys({one : 1, two : 2, three : 3}); <br> =&gt; ["one", "two", "three"]</div>
+                    </div>
+                </li>
+
+                <li id="values">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#values">values</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Return all of the values of the <b>object</b>'s properties.</div>
+                        <div class="code">_.values({one : 1, two : 2, three : 3}); <br> =&gt; [1, 2, 3]</div>
+                    </div>
+                </li>
+
+                <li id="pairs">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#pairs">pairs</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Convert an object into a list of <mark>[key, value]</mark> pairs.</div>
+                        <div class="code">_.pairs({one: 1, two: 2, three: 3}); <br> =&gt; [["one", 1], ["two", 2], ["three", 3]]</div>
+                    </div>
+                </li>
+
+                <li id="object-functions">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#object-functions">functions</a>
+                        <span class="arg">(object)</span>
+                        <span class="alias">methods</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a sorted list of the names of every method in an object — that is to say, the name of every function property of the object.</div>
+                        <div class="code">_.functions(_); <br> =&gt; ["all", "any", "bind", "bindAll", "clone", "compact", "compose" ...</div>
+                    </div>
+                </li>
+
+                <li id="has">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#has">has</a>
+                        <span class="arg">(object, key)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Does the object contain the given key? Identical to <mark>object.hasOwnProperty(key)</mark>, but uses a safe reference to the <mark>hasOwnProperty</mark> function, in case it's been <a href="http://www.devthought.com/2012/01/18/an-object-is-not-a-hash/">overridden accidentally</a>.</div>
+                        <div class="code">_.has({a: 1, b: 2, c: 3}, "b"); <br> =&gt; true</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Generation</h3>
+
+            <ul class="list">
+                <li id="extend">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#extend">extend</a>
+                        <span class="arg">(destination, *sources)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Copy all of the properties in the <b>source</b> objects over to the <b>destination</b> object, and return the <b>destination</b> object. It's in-order, so the last source will override properties of the same name in previous arguments.</div>
+                        <div class="code">_.extend({name : 'moe'}, {age : 50}); <br> =&gt; {name : 'moe', age : 50}</div>
+                    </div>
+                </li>
+
+                <li id="defaults">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#defaults">defaults</a>
+                        <span class="arg">(object, *defaults)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Fill in null and undefined properties in <b>object</b> with values from the <b>defaults</b> objects, and return the <b>object</b>. As soon as the property is filled, further defaults will have no effect.</div>
+                        <div class="code">var iceCream = {flavor : "chocolate"}; <br> _.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"}); <br> =&gt; {flavor : "chocolate", sprinkles : "lots"}</div>
+                    </div>
+                </li>
+
+                <li id="clone">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#clone">clone</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Create a shallow-copied clone of the <b>object</b>. Any nested objects or arrays will be copied by reference, not duplicated.</div>
+                        <div class="code">_.clone({name : 'moe'}); <br> =&gt; {name : 'moe'};</div>
+                    </div>
+                </li>
+
+                <li id="invert">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#invert">invert</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a copy of the <b>object</b> where the keys have become the values and the values the keys. For this to work, all of your object's values should be unique and string serializable.</div>
+                        <div class="code">_.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"}); <br> =&gt; {Moses: "Moe", Louis: "Larry", Jerome: "Curly"};</div>
+                    </div>
+                </li>
+
+                <li id="pick">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#pick">pick</a>
+                        <span class="arg">(object, *keys)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Return a copy of the <b>object</b>, filtered to only have values for the whitelisted <b>keys</b> (or array of valid keys).</div>
+                        <div class="code">_.pick({name : 'moe', age: 50, userid : 'moe1'}, 'name', 'age'); <br> =&gt; {name : 'moe', age : 50}</div>
+                    </div>
+                </li>
+
+                <li id="omit">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#omit">omit</a>
+                        <span class="arg">(object, *keys)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Return a copy of the <b>object</b>, filtered to omit the blacklisted <b>keys</b> (or array of keys).</div>
+                        <div class="code">_.omit({name : 'moe', age : 50, userid : 'moe1'}, 'userid'); <br> =&gt; {name : 'moe', age : 50}</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Type</h3>
+
+            <ul class="list">
+                <li id="isElement">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isElement">isElement</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a DOM element.</div>
+                        <div class="code">_.isElement(jQuery('body')[0]); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isArray">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isArray">isArray</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is an Array.</div>
+                        <div class="code">(function(){ return _.isArray(arguments); })(); <br> =&gt; false <br> _.isArray([1,2,3]); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isObject">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isObject">isObject</a>
+                        <span class="arg">(value)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>value</b> is an Object. Note that JavaScript arrays and functions are objects, while (normal) strings and numbers are not.</div>
+                        <div class="code">_.isObject({}); <br> =&gt; true <br> _.isObject(1); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isArguments">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isArguments">isArguments</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is an Arguments object.</div>
+                        <div class="code">(function(){ return _.isArguments(arguments); })(1, 2, 3); <br> =&gt; true <br> _.isArguments([1,2,3]); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isFunction">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isFunction">isFunction</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a Function.</div>
+                        <div class="code">_.isFunction(alert); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isString">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isString">isString</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a String.</div>
+                        <div class="code">_.isString("moe"); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isNumber">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isNumber">isNumber</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a Number (including <mark>NaN</mark>).</div>
+                        <div class="code">_.isNumber(8.4 * 5); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isBoolean">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isBoolean">isBoolean</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is either <i>true</i> or <i>false</i>.</div>
+                        <div class="code">_.isBoolean(null); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isDate">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isDate">isDate</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a Date.</div>
+                        <div class="code">_.isDate(new Date()); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isRegExp">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isRegExp">isRegExp</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a RegExp.</div>
+                        <div class="code">_.isRegExp(/moe/); <br> =&gt; true</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Value</h3>
+
+            <ul class="list">
+                <li id="isEqual">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isEqual">isEqual</a>
+                        <span class="arg">(object, other)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.</div>
+                        <div class="code">var moe   = {name : 'moe', luckyNumbers : [13, 27, 34]}; <br> var clone = {name : 'moe', luckyNumbers : [13, 27, 34]}; <br> moe == clone; <br> =&gt; false <br> _.isEqual(moe, clone); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isEmpty">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isEmpty">isEmpty</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> contains no values.</div>
+                        <div class="code">_.isEmpty([1, 2, 3]); <br> =&gt; false <br> _.isEmpty({}); <br> =&gt; true</div>
+                    </div>
+                </li>
+
+                <li id="isFinite">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isFinite">isFinite</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is a finite Number.</div>
+                        <div class="code">_.isFinite(-101); <br> =&gt; true <br><br> _.isFinite(-Infinity); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isNaN">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isNaN">isNaN</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>object</b> is <i>NaN</i>.<br> Note: this is not the same as the native <b>isNaN</b> function, which will also return true if the variable is <i>undefined</i>.</div>
+                        <div class="code">_.isNaN(NaN); <br> =&gt; true <br> isNaN(undefined); <br> =&gt; true <br> _.isNaN(undefined); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isNull">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isNull">isNull</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if the value of <b>object</b> is <i>null</i>.</div>
+                        <div class="code">_.isNull(null); <br> =&gt; true <br> _.isNull(undefined); <br> =&gt; false</div>
+                    </div>
+                </li>
+
+                <li id="isUndefined">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#isUndefined">isUndefined</a>
+                        <span class="arg">(value)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns <i>true</i> if <b>value</b> is <i>undefined</i>.</div>
+                        <div class="code">_.isUndefined(window.missingVariable); <br> =&gt; true</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Other</h3>
+
+            <ul class="list">
+                <li id="tap">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#tap">tap</a>
+                        <span class="arg">(object, interceptor)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Invokes <b>interceptor</b> with the <b>object</b>, and then returns <b>object</b>. The primary purpose of this method is to "tap into" a method chain, in order to perform operations on intermediate results within the chain.</div>
+                        <div class="code">_.chain([1,2,3,200]) <br> .filter(function(num) { return num % 2 == 0; }) <br> .tap(alert) <br> .map(function(num) { return num * num }) <br> .value(); <br> =&gt; // [2, 200] (alerted) <br> =&gt; [4, 40000]</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <h2>Utility</h2>
+
+            <h3>Generation</h3>
+
+            <ul class="list">
+                <li id="random">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#random">random</a>
+                        <span class="arg">(min, max)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a random integer between <b>min</b> and <b>max</b>, inclusive. If you only pass one argument, it will return a number between <mark>0</mark> and that number.</div>
+                        <div class="code">_.random(0, 100); <br> =&gt; 42</div>
+                    </div>
+                </li>
+
+                <li id="uniqueId">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#uniqueId">uniqueId</a>
+                        <span class="arg">([prefix])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Generate a globally-unique id for client-side models or DOM elements that need one. If <b>prefix</b> is passed, the id will be appended to it.</div>
+                        <div class="code">_.uniqueId('contact_'); <br> =&gt; 'contact_104'</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Text</h3>
+
+            <ul class="list">
+                <li id="escape">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#escape">escape</a>
+                        <span class="arg">(string)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Escapes a string for insertion into HTML, replacing <mark>&amp;</mark>, <mark>&lt;</mark>, <mark>&gt;</mark>, <mark>"</mark>, <mark>'</mark>, and <mark>/</mark> characters.</div>
+                        <div class="code">_.escape('Curly, Larry &amp; Moe'); <br> =&gt; "Curly, Larry &amp;amp; Moe"</div>
+                    </div>
+                </li>
+
+                <li id="unescape">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#unescape">unescape</a>
+                        <span class="arg">(string)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">The opposite of <a href="#escape"><b>escape</b></a>, replaces <mark>&amp;amp;</mark>, <mark>&amp;lt;</mark>, <mark>&amp;gt;</mark>, <mark>&amp;quot;</mark>, <mark>&amp;#x27;</mark>, and <mark>&amp;#x2F;</mark> with their unescaped counterparts.</div>
+                        <div class="code">_.unescape('Curly, Larry &amp;amp; Moe'); <br> =&gt; "Curly, Larry &amp; Moe"</div>
+                    </div>
+                </li>
+
+                <li id="template">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#template">template</a>
+                        <span class="arg">(templateString, [data], [settings])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Compiles JavaScript templates into functions that can be evaluated for rendering. Useful for rendering complicated bits of HTML from JSON data sources. Template functions can both interpolate variables, using <mark>&lt;%= … %&gt;</mark>, as well as execute arbitrary JavaScript code, with <mark>&lt;% … %&gt;</mark>. If you wish to interpolate a value, and have it be HTML-escaped, use <mark>&lt;%- … %&gt;</mark> When you evaluate a template function, pass in a <b>data</b> object that has properties corresponding to the template's free variables. If you're writing a one-off, you can pass the <b>data</b> object as the second parameter to <b>template</b> in order to render immediately instead of returning a template function. The <b>settings</b> argument should be a hash containing any <mark>_.templateSettings</mark> that should be overridden.</div>
+                        <div class="code">var compiled = _.template("hello: &lt;%= name %&gt;"); <br> compiled({name : 'moe'}); <br> =&gt; "hello: moe" <br><br> var list = "&lt;% _.each(people, function(name) { %&gt; &lt;li&gt;&lt;%= name %&gt;&lt;/li&gt; &lt;% }); %&gt;"; <br> _.template(list, {people : ['moe', 'curly', 'larry']}); <br> =&gt; "&lt;li&gt;moe&lt;/li&gt;&lt;li&gt;curly&lt;/li&gt;&lt;li&gt;larry&lt;/li&gt;" <br><br> var template = _.template("&lt;b&gt;&lt;%- value %&gt;&lt;/b&gt;"); <br> template({value : '&lt;script&gt;'}); <br> =&gt; "&lt;b&gt;&amp;lt;script&amp;gt;&lt;/b&gt;"</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Function</h3>
+
+            <ul class="list">
+                <li id="times">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#times">times</a>
+                        <span class="arg">(n, iterator, [context])</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Invokes the given iterator function <b>n</b> times. Each invocation of <b>iterator</b> is called with an <mark>index</mark> argument. <br> <i>Note: this example uses the <a href="#chaining">chaining syntax</a></i>.</div>
+                        <div class="code">_(3).times(function(n){ genie.grantWishNumber(n); });</div>
+                    </div>
+                </li>
+
+                <li id="mixin">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#mixin">mixin</a>
+                        <span class="arg">(object)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Allows you to extend Underscore with your own utility functions. Pass a hash of <mark>{name: function}</mark> definitions to have your functions added to the Underscore object, as well as the OOP wrapper.</div>
+                        <div class="code">_.mixin({ <br> capitalize : function(string) { <br> return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase(); <br> } <br> }); <br> _("fabio").capitalize(); <br> =&gt; "Fabio"</div>
+                    </div>
+                </li>
+
+                <li id="result">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#result">result</a>
+                        <span class="arg">(object, property)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">If the value of the named property is a function then invoke it; otherwise, return it.</div>
+                        <div class="code">var object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }}; <br> _.result(object, 'cheese'); <br> =&gt; "crumpets" <br> _.result(object, 'stuff'); <br> =&gt; "nonsense"</div>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Other</h3>
+
+            <ul class="list">
+                <li id="noConflict">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#noConflict">noConflict</a>
+                        <span class="arg">()</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Give control of the "_" variable back to its previous owner. Returns a reference to the <b>Underscore</b> object.</div>
+                        <div class="code">var underscore = _.noConflict();</div>
+                    </div>
+                </li>
+
+                <li id="identity">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#identity">identity</a>
+                        <span class="arg">(value)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns the same value that is used as the argument. In math: <mark>f(x) = x</mark><br> This function looks useless, but is used throughout Underscore as a default iterator.</div>
+                        <div class="code">var moe = {name : 'moe'}; <br> moe === _.identity(moe); <br> =&gt; true</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <h2>Chaining</h2>
+
+            <ul class="list">
+                <li id="chain">
+                    <header>
+                        <span class="prefix">_.</span>
+                        <a class="name" href="http://underscorejs.org/#chain">chain</a>
+                        <span class="arg">(obj)</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until <mark>value</mark> is used.</div>
+                        <div class="code">var stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}]; <br> var youngest = _.chain(stooges) <br> .sortBy(function(stooge){ return stooge.age; }) <br> .map(function(stooge){ return stooge.name + ' is ' + stooge.age; }) <br> .first() <br> .value(); <br> =&gt; "moe is 21"</div>
+                    </div>
+                </li>
+
+                <li id="value">
+                    <header>
+                        <span class="prefix">_(obj).</span>
+                        <a class="name" href="http://underscorejs.org/#value">value</a>
+                        <span class="arg">()</span>
+                    </header>
+                    <div class="hint">
+                        <div class="desc">Extracts the value of a wrapped object.</div>
+                        <div class="code">_([1, 2, 3]).value(); <br> =&gt; [1, 2, 3]</div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <div id="off-site">
+        <a href="http://underscorejs.org/">underscorejs.org</a>
+        <span>Shift + Click &ndash; RU</span>
+    </div>
+</div>
+</body>
+</html>

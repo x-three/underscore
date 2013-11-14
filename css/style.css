@@ -1,0 +1,157 @@
+@import "reset.css";
+
+body {
+    font: 12px/20px Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
+    color: #444;
+}
+
+#wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    min-width: 1600px;
+    min-height: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 20px;
+}
+
+a {
+    color: #0088dd;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font: bold 35px/1em Georgia, "Century Schoolbook L", Serif;
+    margin: 0 0 35px;
+}
+
+h2 {
+    font: bold 20px/1em Georgia, "Century Schoolbook L", Serif;
+    margin: 0 0 20px;
+}
+
+h3 {
+    font: bold 12px/1em Georgia, "Century Schoolbook L", Serif;
+    margin: 0 0 5px;
+}
+
+#off-site {
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+}
+
+#off-site a {
+    font: 16px/20px Georgia, "Century Schoolbook L", Serif;
+    color: #444;
+}
+
+#off-site span {
+    color: #888;
+    font-size: 11px;
+    line-height: 15px;
+    display: block;
+    font-style: italic;
+    text-align: right;
+
+}
+
+/* .columns *******************************************************************/
+.columns > li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.columns > li + li {
+    margin-left: 55px;
+}
+
+/* .list **********************************************************************/
+.list {
+    margin: 0 0 15px;
+}
+
+.list > li {
+    position: relative;
+}
+
+.list > li header {
+    overflow: hidden;
+}
+
+.list > li header > * {
+    float: left;
+}
+
+.list > li header > .name {
+    margin: 0 2px 0 0;
+}
+
+.list > li header > .alias {
+    font-size: 11px;
+    font-style: italic;
+    color: #888;
+    float: right;
+    margin: 0 0 0 30px;
+}
+
+.list > li .hint {
+    display: none;
+    position: absolute;
+    top: 150%;
+    left: 0;
+    color: #fff;
+    background: rgba(50, 50, 50, 0.9);
+    z-index: 1;
+    width: 500px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font: 11px/15px Verdana, "Geneva CY", "DejaVu Sans", sans-serif;
+}
+
+.list > li .hint.top {
+    top: auto;
+    bottom: 150%;
+}
+
+.list > li .hint.left {
+    left: auto;
+    right: 0;
+}
+
+.list > li .hint a {
+    color: #fff;
+}
+
+.list > li .hint .code {
+    font-family: "Courier New", monospace;
+    border-left: 3px solid #fff;
+    padding: 0 0 0 8px;
+}
+
+.list > li .hint * + .code {
+    margin-top: 15px;
+}
+
+.list > li .hint .desc mark {
+    background: #eee;
+    padding: 0 2px;
+    display: inline-block;
+    color: #333;
+    border-radius: 2px;
+}
+
+
+
+
+
+
+
+
+
